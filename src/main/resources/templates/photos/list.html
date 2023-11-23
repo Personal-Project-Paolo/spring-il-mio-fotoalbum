@@ -21,6 +21,9 @@
             </div>
         </div>
         <hr>
+        <div class="my-3">
+            <a th:href="@{/photos/create}" class="btn btn-primary">Add new photo</a>
+        </div>
         <div class="d-flex flex-wrap justify-content-center">
             <div th:each="photo : ${photoList}" th:object="${photo}" class="m-0 w-25 my-2">
                 <div class="card bg-dark text-light border-2 border-secondary h-100 mx-2 ">
