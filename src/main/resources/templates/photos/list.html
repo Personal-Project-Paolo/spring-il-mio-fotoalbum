@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
+<head th:insert="/fragments/resources :: headResources('Photo List')"></head>
+    <body class="bg-dark text-light">
+    <nav th:replace="fragments/navbar :: topNavbar('photos')"></nav>
+    <div class="container border-light mt-3" th:if="${photoList.size() > 0}">
+        <div class="container">
+            <div class="d-flex align-items-center justify-content-between">
+                <h1>Photo List</h1>
+                <form th:action="@{/photos}" method="GET">
+                    <div class="input-group">
+                        <input
+                                type="text"
+                                placeholder="Search by name"
+                                class="form-control" name="search"
+                                th:value="${param.search}"
+                        >
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <hr>
+        <div th:each ="photo : ${photoList}" th:object="${photo}" class="m-0">
+            <span th:text ="*{title}"></span>
+        </div>
+    </div>
+    <div th:unless="${photoList.size() > 0}" class="container mt-2"><h1>No results</h1></div>
+    </body>
+</html>
