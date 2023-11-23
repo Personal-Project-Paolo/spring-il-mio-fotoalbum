@@ -55,33 +55,43 @@ INSERT INTO photos_categories (photo_id, categories_id) VALUES (6, 13);
 INSERT INTO photos_categories (photo_id, categories_id) VALUES (6, 14);
 
 INSERT INTO photos_categories (photo_id, categories_id) VALUES (7, 15);
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (7, 16);
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (7, 1);
 
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (8, 17);
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (8, 18);
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (8, 2);
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (8, 3);
 
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (9, 19);
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (9, 20);
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (9, 4);
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (9, 5);
 
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (10, 1);
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (10, 2);
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (10, 6);
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (10, 7);
 
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (11, 3);
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (11, 4);
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (11, 8);
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (11, 9);
 
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (12, 5);
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (12, 6);
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (12, 10);
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (12, 11);
 
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (13, 7);
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (13, 8);
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (13, 12);
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (13, 13);
 
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (14, 9);
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (14, 10);
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (14, 14);
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (14, 15);
 
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (15, 11);
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (15, 12);
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (15, 1);
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (15, 2);
 
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (16, 13);
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (16, 14);
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (16, 3);
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (16, 4);
 
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (17, 15);
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (17, 5);
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (17, 6);
+
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (18, 7);
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (18, 8);
+
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (19, 9);
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (19, 10);
+
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (20, 11);
+INSERT INTO photos_categories (photo_id, categories_id) VALUES (20, 12);
