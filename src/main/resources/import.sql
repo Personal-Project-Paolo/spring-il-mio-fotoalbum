@@ -85,13 +85,3 @@ INSERT INTO photos_categories (photo_id, categories_id) VALUES (16, 13);
 INSERT INTO photos_categories (photo_id, categories_id) VALUES (16, 14);
 
 INSERT INTO photos_categories (photo_id, categories_id) VALUES (17, 15);
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (17, 16);
-
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (18, 17);
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (18, 18);
-
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (19, 19);
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (19, 20);
-
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (20, 1);
-INSERT INTO photos_categories (photo_id, categories_id) VALUES (20, 2);

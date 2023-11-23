@@ -32,13 +32,13 @@ public class PhotoController {
     private CategoryRepository categoryRepository;
 
     @GetMapping
-    public String index(@RequestParam Optional<String> search, Model model){
+    public String index (@RequestParam Optional<String> search, Model model){
         model.addAttribute("photoList", photoService.getPhotoList(search));
         return "/photos/list";
     }
 
     @GetMapping("/show/{id}")
-    public String show(@PathVariable Integer id, Model model){
+    public String show (@PathVariable Integer id, Model model){
         try{
             Photo photo = photoService.getPhotoById(id);
             model.addAttribute("photo", photo);
@@ -49,7 +49,7 @@ public class PhotoController {
     }
 
     @GetMapping("/create")
-    public String create(Model model){
+    public String create (Model model){
         model.addAttribute("photo", new Photo());
 
         List<Category> categoryList = categoryRepository.findByOrderByName();
@@ -59,7 +59,7 @@ public class PhotoController {
     }
 
     @PostMapping("/create")
-    public String store(@Valid @ModelAttribute("photo") Photo formPhoto,
+    public String store (@Valid @ModelAttribute("photo") Photo formPhoto,
                         BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes){
         if(bindingResult.hasErrors()){
 
@@ -80,9 +80,37 @@ public class PhotoController {
             model.addAttribute("categoryList", categoryList);
             return "/photos/form";
         }
-
-
     }
 
+    @GetMapping("/edit/{id}")
+    public String edit (@PathVariable Integer id, Model model) {
+        try{
+            model.addAttribute("photo", photoService.getPhotoById(id));
+
+            List<Category> categoryList = categoryRepository.findByOrderByName();
+            model.addAttribute("categoryList", categoryList);
+
+            return "/photos/form";
+        }catch (PhotoNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "photo with id " + id + " not found");
+        }
+    }
+
+    @PostMapping("/edit/{id}")
+    public String update (@PathVariable Integer id,
+                          @Valid @ModelAttribute("photo") Photo formPhoto,
+                          BindingResult bindingResult, Model model) {
+        if(bindingResult.hasErrors()){
+            List<Category> categoryList = categoryRepository.findByOrderByName();
+            model.addAttribute("categoryList", categoryList);
+            return "/photos/form";
+        }
+        try{
+            Photo savedPhoto = photoService.editPhoto(formPhoto);
+            return "redirect:/photos/show/" + savedPhoto.getId();
+        }catch (PhotoNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
+    }
 
 }

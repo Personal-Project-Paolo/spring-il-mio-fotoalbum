@@ -47,4 +47,17 @@ public class PhotoService {
             throw new PhotoTitleUniqueException(photo.getTitle());
         }
     }
+
+    //Edit
+    public Photo editPhoto(Photo photo) throws PhotoNotFoundException {
+        Photo photoToEdit = getPhotoById(photo.getId());
+
+        photoToEdit.setTitle(photo.getTitle());
+        photoToEdit.setVisible(photo.isVisible());
+        photoToEdit.setImage(photo.getImage());
+        photoToEdit.setDescription(photo.getDescription());
+        photoToEdit.setCategories(photo.getCategories());
+
+        return photoRepository.save(photoToEdit);
+    }
 }
