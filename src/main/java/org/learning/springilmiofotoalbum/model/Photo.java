@@ -18,6 +18,7 @@ public class Photo {
 
     @NotBlank(message = "Title must not be blank")
     @Size(max = 255, message = "Length must be less than 255")
+    @Column(unique = true)
     private String title;
 
     @NotBlank(message = "Description must not be blank")

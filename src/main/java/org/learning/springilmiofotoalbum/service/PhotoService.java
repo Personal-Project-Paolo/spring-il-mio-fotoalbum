@@ -1,5 +1,6 @@
 package org.learning.springilmiofotoalbum.service;
 
+import org.learning.springilmiofotoalbum.exception.PhotoTitleUniqueException;
 import org.learning.springilmiofotoalbum.exception.PhotoNotFoundException;
 import org.learning.springilmiofotoalbum.model.Photo;
 import org.learning.springilmiofotoalbum.repository.PhotoRepository;
@@ -34,6 +35,16 @@ public class PhotoService {
             return result.get();
         }else {
            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "photo with id " + id + " not found");
+        }
+    }
+
+    //Create
+    public Photo createPhoto(Photo photo) throws PhotoTitleUniqueException {
+        photo.setId(null);
+        try{
+            return photoRepository.save(photo);
+        } catch (RuntimeException e) {
+            throw new PhotoTitleUniqueException(photo.getTitle());
         }
     }
 }
