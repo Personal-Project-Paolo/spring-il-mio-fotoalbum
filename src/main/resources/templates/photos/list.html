@@ -21,8 +21,16 @@
             </div>
         </div>
         <hr>
-        <div th:each ="photo : ${photoList}" th:object="${photo}" class="m-0">
-            <span th:text ="*{title}"></span>
+        <div class="d-flex flex-wrap justify-content-center">
+            <div th:each="photo : ${photoList}" th:object="${photo}" class="m-0 w-25 my-2">
+                <div class="card bg-dark text-light border-secondary h-100 mx-2">
+                    <img th:src="*{image}" class="card-img-top object-fit-cover" alt="..." style="height: 300px;">
+                    <div class="card-body">
+                        <h5 th:text="*{title}" class="card-title"></h5>
+                        <p th:text="*{description}" class="card-text"></p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div th:unless="${photoList.size() > 0}" class="container mt-2"><h1>No results</h1></div>
