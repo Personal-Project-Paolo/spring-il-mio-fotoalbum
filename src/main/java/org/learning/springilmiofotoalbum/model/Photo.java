@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.util.List;
+
 @Entity
 @Table(name = "photos")
 public class Photo {
@@ -28,6 +30,9 @@ public class Photo {
     private String image;
 
     private boolean visible = false;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    private List<Category> categories;
 
     //Getter e Setter
     public Integer getId() {
@@ -68,5 +73,13 @@ public class Photo {
 
     public void setVisible(boolean visible) {
         this.visible = visible;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Category> categories) {
+        this.categories = categories;
     }
 }
