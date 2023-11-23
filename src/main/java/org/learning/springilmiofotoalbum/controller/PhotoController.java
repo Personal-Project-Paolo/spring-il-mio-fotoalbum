@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/templates/photos")
+@RequestMapping("/photos")
 public class PhotoController {
 
     @Autowired
@@ -20,7 +20,7 @@ public class PhotoController {
     @GetMapping
     public String index(@RequestParam Optional<String> search, Model model){
         model.addAttribute("photoList", photoService.getPhotoList(search));
-        return "/templates/photos/list";
+        return "/photos/list";
     }
 
 }
