@@ -60,4 +60,9 @@ public class PhotoService {
 
         return photoRepository.save(photoToEdit);
     }
+
+    //Delete
+    public void deletePhoto (Integer id) {
+      photoRepository.deleteById(id);
+    }
 }
