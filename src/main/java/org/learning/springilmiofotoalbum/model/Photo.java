@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -28,6 +29,8 @@ public class Photo {
     @Size(max = 2500, message = "Length must be less than 2500")
     @Column(length = 2500)
     private String image;
+
+    private LocalDateTime createdAt;
 
     private boolean visible = false;
 
@@ -65,6 +68,14 @@ public class Photo {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     public boolean isVisible() {
