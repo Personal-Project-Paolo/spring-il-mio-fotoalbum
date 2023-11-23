@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
+<head th:insert="/fragments/resources :: headResources('Photo Details')"></head>
+<body class="bg-dark">
+<nav th:replace="fragments/navbar :: topNavbar('photos')"></nav>
+<div class="container border-light text-light mt-3" th:object="${photo}">
+    <section>
+        <div>
+            <h1 th:text ="*{title}">>Book Details</h1>
+            <img th:src="*{image}" alt="" class="d-block w-50 h-50 rounded-4">
+            <hr>
+            <!-- message da redirectAttributes -->
+            <!-- <div th:if="${message != null}" class="alert alert-success alert-dismissible fade show">
+                <span th:text="${message}"></span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>-->
+            <dl>
+                <dt>Description</dt>
+                <dd th:text ="*{description}"></dd>
+                <!--<dt>Added to catalog</dt>
+                <dd th:text="*{#temporals.format(createdAt, 'yyyy-MM-dd')}"></dd>-->
+            </dl>
+        </div>
+        <!-- <div class="col-4">
+             <h3>Ingredients</h3>
+             <ul th:if="*{ingredients.size() > 0}">
+                 <li th:each="ingredientObj : *{ingredients}" th:text="${ingredientObj.name}"></li>
+             </ul>
+             <div th:unless="*{ingredients.size() > 0}" class="alert alert-info">The list is empty</div>
+         </div>-->
+     </section>
+     <a th:href="@{/photos}"  class="btn btn-primary">Back to List</a>
+
+ </div>
+ </body>
+ </html>
