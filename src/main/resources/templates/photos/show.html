@@ -5,7 +5,7 @@
 <nav th:replace="fragments/navbar :: topNavbar('photos')"></nav>
 <div class="container border-light text-light mt-3" th:object="${photo}">
     <section>
-        <h1 th:text ="*{title}">>Book Details</h1>
+        <h1 th:text ="*{title}">>Photo Details</h1>
         <div class="d-flex">
             <img th:src="*{image}" alt="" class="d-block w-50 h-50 rounded-4">
             <div class="ms-5">
