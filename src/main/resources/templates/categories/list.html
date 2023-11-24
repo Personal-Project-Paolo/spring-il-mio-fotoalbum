@@ -5,35 +5,39 @@
 <nav th:replace="fragments/navbar :: topNavbar('categories')"></nav>
 <div class="container border-light text-light mt-3" th:if="${categoryList.size() > 0}">
     <div class="container">
-        <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
             <h1>Categories</h1>
-            <form th:action="@{/categories}" method="GET">
-                 <div class="input-group">
-                     <input
-                             type="text"
-                             placeholder="Search by name"
-                             class="form-control" name="search"
-                             th:value="${param.search}"
-                     >
-                     <button class="btn btn-primary" type="submit">Search</button>
-                 </div>
-            </form>
         </div>
         <!--<div th:if="${errorMessage}" class="alert alert-danger">
             <span th:text="${errorMessage}"></span>
         </div>-->
         <section>
-            <!--<form
-                     id="category-form"
-                     th:action="@{/categories}"
-                     method="POST"
-                     th:object="${categoryObj}"
-             >
-                 <div class="mb-3"
-                      th:insert="fragments/components :: formField('text', 'Categories name', 'name')">
-                 </div>
-                 <button class="btn btn-primary" type="submit">Add category</button>
-             </form>-->
+            <div class="row d-flex">
+                <form th:action="@{/categories}" method="GET" class="col-4">
+                    <label class="mb-2">Serach One Category</label>
+                    <div class="input-group">
+                        <input
+                            type="text"
+                            placeholder="Search by name"
+                            class="form-control " name="search"
+                            th:value="${param.search}"
+                        >
+                        <button class="btn btn-primary" type="submit">Search</button>
+                    </div>
+                </form>
+                <form
+                    id="category-form"
+                    th:action="@{/categories}"
+                    method="POST"
+                    th:object="${categoryObj}"
+                    class="col-4 d-flex align-items-center"
+                >
+                    <div class="mb-3 rounded-start-0"
+                         th:insert="fragments/components :: formField('text', 'Categories name', 'name')">
+                    </div>
+                    <button class="btn btn-primary mt-3 mx-1" type="submit">Add category</button>
+                </form>
+            </div>
          </section>
          <hr>
          <!-- message da redirectAttributes -->
