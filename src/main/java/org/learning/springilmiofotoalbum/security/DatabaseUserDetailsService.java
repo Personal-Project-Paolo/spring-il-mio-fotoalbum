@@ -14,15 +14,16 @@ import java.util.Optional;
 public class DatabaseUserDetailsService implements UserDetailsService {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username)
+            throws UsernameNotFoundException {
         Optional<User> loggedUser = userRepository.findByEmail(username);
         if (loggedUser.isPresent()){
             return new DatabaseUserDetails(loggedUser.get());
         }else {
-            throw new UsernameNotFoundException(username);
+            throw new UsernameNotFoundException("Username not found");
         }
     }
 }

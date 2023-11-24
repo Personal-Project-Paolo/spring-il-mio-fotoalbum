@@ -6,9 +6,11 @@ import org.learning.springilmiofotoalbum.exception.PhotoNotFoundException;
 import org.learning.springilmiofotoalbum.model.Category;
 import org.learning.springilmiofotoalbum.model.Photo;
 import org.learning.springilmiofotoalbum.repository.CategoryRepository;
+import org.learning.springilmiofotoalbum.security.DatabaseUserDetails;
 import org.learning.springilmiofotoalbum.service.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,7 +34,13 @@ public class PhotoController {
     private CategoryRepository categoryRepository;
 
     @GetMapping
-    public String index (@RequestParam Optional<String> search, Model model){
+    public String index (@RequestParam Optional<String> search, Model model, Authentication authentication){
+
+
+        DatabaseUserDetails user = (DatabaseUserDetails) authentication.getPrincipal();
+        System.out.println(user.getUsername());
+        System.out.println(user.getAuthorities());
+
         model.addAttribute("photoList", photoService.getPhotoList(search));
         return "/photos/list";
     }
