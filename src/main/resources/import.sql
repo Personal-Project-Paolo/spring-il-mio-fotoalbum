@@ -95,3 +95,7 @@ INSERT INTO photos_categories (photos_id, categories_id) VALUES (19, 10);
 
 INSERT INTO photos_categories (photos_id, categories_id) VALUES (20, 11);
 INSERT INTO photos_categories (photos_id, categories_id) VALUES (20, 12);
+
+INSERT INTO roles (id, name) VALUES(1, 'ADMIN');
+
+INSERT INTO users (email, first_name, last_name, registered_at, password) VALUES('paolo.falco@email.com', 'Paolo', 'Falco', '2023-11-20 17:05', '{noop}paolo');
