@@ -12,7 +12,8 @@ public class Category {
     private Integer id;
 
     @NotBlank(message = "Name must not be blank")
-    @Size(max = 255, message = "Length must be less than 255")
+    @Size(max = 55, message = "Length must be less than 55")
+    @Column(nullable = false, unique = true)
     private String name;
 
     public Integer getId() {
