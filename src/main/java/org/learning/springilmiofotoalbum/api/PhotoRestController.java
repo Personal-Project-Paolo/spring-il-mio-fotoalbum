@@ -28,7 +28,7 @@ public class PhotoRestController {
     //http://localhost:8080/api/v1/photos
     @GetMapping
     public List<Photo> index (@RequestParam Optional<String> search){
-        return photoService.getPhotoList(search);
+        return photoService.getPhotoVisibility(search);
     }
 
     //http://localhost:8080/api/v1/photos/id
