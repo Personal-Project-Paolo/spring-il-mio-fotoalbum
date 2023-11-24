@@ -6,6 +6,10 @@ import org.learning.springilmiofotoalbum.exception.PhotoTitleUniqueException;
 import org.learning.springilmiofotoalbum.model.Photo;
 import org.learning.springilmiofotoalbum.service.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -67,5 +71,20 @@ public class PhotoRestController {
         } catch (PhotoNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+    }
+
+    //Paginazione
+    @GetMapping("/page")
+    public Page<Photo> pagedIndex(
+            @RequestParam(name = "size", defaultValue = "5") Integer size,
+            @RequestParam(name = "page", defaultValue = "0") Integer page) {
+
+        return photoService.getPage(PageRequest.of(page, size));
+    }
+
+    //http://localhost:8080/api/v1/photos/page/v2
+    @GetMapping("/page/v2")
+    public Page<Photo> pagedIndexV2(@PageableDefault(page = 0, size = 5) Pageable pageable) {
+        return photoService.getPage(pageable);
     }
 }

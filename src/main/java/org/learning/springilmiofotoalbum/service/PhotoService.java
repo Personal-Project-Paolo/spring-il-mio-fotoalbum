@@ -5,6 +5,8 @@ import org.learning.springilmiofotoalbum.exception.PhotoNotFoundException;
 import org.learning.springilmiofotoalbum.model.Photo;
 import org.learning.springilmiofotoalbum.repository.PhotoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -26,6 +28,10 @@ public class PhotoService {
       else {
           return photoRepository.findAll();
       }
+    }
+
+    public List<Photo> getBookList() {
+        return photoRepository.findAll();
     }
 
     //Show
@@ -64,5 +70,10 @@ public class PhotoService {
     //Delete
     public void deletePhoto (Integer id) {
       photoRepository.deleteById(id);
+    }
+
+    //Pagination
+    public Page<Photo> getPage(Pageable pageable) {
+        return photoRepository.findAll(pageable);
     }
 }
