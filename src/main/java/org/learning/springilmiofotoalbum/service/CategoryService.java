@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,6 +49,15 @@ public class CategoryService {
 
     //Delete
     public void deleteCategory (Integer id) {
+        Category categoryDelete = getCategoryById(id);
+        List<Photo> photos = categoryDelete.getPhotos();
+        if (photos.size() > 0){
+            for (Photo photo : photos){
+                List <Category> categories = photo.getCategories();
+                categories.remove(categoryDelete);
+            }
+            categoryDelete.setPhotos(new ArrayList<>());
+        }
         categoryRepository.deleteById(id);
     }
 }

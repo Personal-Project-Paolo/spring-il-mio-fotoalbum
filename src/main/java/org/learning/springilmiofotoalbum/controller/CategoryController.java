@@ -35,6 +35,7 @@ public class CategoryController {
                          BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()){
             model.addAttribute("categoryList", categoryService.getCategoryList(Optional.empty()));
+            return "redirect:/categories";
         }
         try {
             categoryService.save(formCategory);
