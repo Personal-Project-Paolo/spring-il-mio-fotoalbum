@@ -29,6 +29,10 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
 
+   /* @OneToMany(mappedBy = "user", orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<Message> messages = new ArrayList<>();*/
+
     public Integer getId() {
         return id;
     }
@@ -84,4 +88,12 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
+    /*public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }*/
 }
