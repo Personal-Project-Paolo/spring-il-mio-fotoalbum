@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org">
+<head th:insert="/fragments/resources :: headResources('Message Details')"></head>
+<body class="bg-dark">
+<nav th:replace="fragments/navbar :: topNavbar('photos')"></nav>
+<div class="container border-light text-light mt-3" th:object="${message}">
+    <section>
+        <h1>Message Details</h1>
+        <hr>
+        <dl>
+            <dt>Email</dt>
+            <dd th:text ="*{email}"></dd>
+            <dt>Description</dt>
+            <dd th:text ="*{message}"></dd>
+            <dt>Writed</dt>
+            <dd th:text="*{#temporals.format(createdAt, 'yyyy-MM-dd')}"></dd>
+        </dl>
+
+    </section>
+    <a th:href="@{/messages}"  class="btn btn-primary">Back to List</a>
+
+</div>
+</body>
+</html>
