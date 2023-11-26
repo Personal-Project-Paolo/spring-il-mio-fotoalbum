@@ -37,7 +37,7 @@ public class SecurityConfiguration {
         http
                 .authorizeHttpRequests()
                 .requestMatchers("/categories").hasAuthority("ADMIN")
-                .requestMatchers("/templates/users").hasAuthority("ADMIN")
+                .requestMatchers("/users").hasAuthority("ADMIN")
                 .requestMatchers(HttpMethod.POST, "/photos/**").hasAuthority("ADMIN")
                 .requestMatchers("/photos", "/photos/**").hasAnyAuthority("ADMIN", "USER")
                 .requestMatchers("/**").permitAll()
