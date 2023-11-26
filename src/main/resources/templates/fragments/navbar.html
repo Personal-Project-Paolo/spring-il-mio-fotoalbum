@@ -29,7 +29,12 @@
                         Users
                     </a>
                 </li>
-
+                <li class="nav-item">
+                    <a class="nav-link" th:classAppend="${area == 'messages' ? 'active' : ''}"
+                       th:href="@{/messages}" sec:authorize="hasAuthority('ADMIN')">
+                        Messages
+                    </a>
+                </li>
             </ul >
             <div class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item d-flex justify-content-end">
