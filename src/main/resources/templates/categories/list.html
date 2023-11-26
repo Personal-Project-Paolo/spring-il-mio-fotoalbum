@@ -3,14 +3,11 @@
 <head th:insert="/fragments/resources :: headResources('Categories')"></head>
 <body class="bg-dark">
 <nav th:replace="fragments/navbar :: topNavbar('categories')"></nav>
-<div class="container border-light text-light mt-3" th:if="${categoryList.size() > 0}">
+<div class="container border-light text-light mt-3">
     <div class="container">
         <div class="d-flex align-items-center">
             <h1>Categories</h1>
         </div>
-        <!--<div th:if="${errorMessage}" class="alert alert-danger">
-            <span th:text="${errorMessage}"></span>
-        </div>-->
         <section>
             <div class="row d-flex justify-content-center">
                 <form th:action="@{/categories}" method="GET" class="col-8">
@@ -71,7 +68,6 @@
             </tr>
             </tbody>
         </table>
-        <div th:unless="${categoryList.size() > 0}">No results</div>
     </div>
 </div>
 </body>
