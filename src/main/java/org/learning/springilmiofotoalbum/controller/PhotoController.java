@@ -3,6 +3,8 @@ package org.learning.springilmiofotoalbum.controller;
 import jakarta.validation.Valid;
 import org.learning.springilmiofotoalbum.exception.PhotoTitleUniqueException;
 import org.learning.springilmiofotoalbum.exception.PhotoNotFoundException;
+import org.learning.springilmiofotoalbum.exception.UserIdNotValidException;
+import org.learning.springilmiofotoalbum.exception.UserNotFoundException;
 import org.learning.springilmiofotoalbum.model.Category;
 import org.learning.springilmiofotoalbum.model.Photo;
 import org.learning.springilmiofotoalbum.repository.CategoryRepository;
@@ -36,12 +38,14 @@ public class PhotoController {
     @GetMapping
     public String index (@RequestParam Optional<String> search, Model model, Authentication authentication){
 
-
         DatabaseUserDetails user = (DatabaseUserDetails) authentication.getPrincipal();
-        System.out.println(user.getUsername());
-        System.out.println(user.getAuthorities());
-
-        model.addAttribute("photoList", photoService.getPhotoList(search));
+        /*System.out.println(user.getUsername());
+        System.out.println(user.getAuthorities());*/
+        if (user.isSuperAdmin()){
+            model.addAttribute("photoList", photoService.getPhotoList(search));
+        }else{
+            model.addAttribute("photoList", photoService.getPhotoListForAdmin(search, user.getId()));
+        }
         return "/photos/list";
     }
 
@@ -57,18 +61,22 @@ public class PhotoController {
     }
 
     @GetMapping("/create")
-    public String create (Model model){
-        model.addAttribute("photo", new Photo());
-
-        List<Category> categoryList = categoryRepository.findByOrderByName();
-        model.addAttribute("categoryList", categoryList);
-        return "/photos/form";
-
+    public String create (Model model, Authentication authentication){
+        try{
+            DatabaseUserDetails user = (DatabaseUserDetails) authentication.getPrincipal();
+            model.addAttribute("photo", photoService.createPhoto(user.getId()));
+            List<Category> categoryList = categoryRepository.findByOrderByName();
+            model.addAttribute("categoryList", categoryList);
+            return "/photos/form";
+        } catch (UserNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+        }
     }
 
     @PostMapping("/create")
     public String store (@Valid @ModelAttribute("photo") Photo formPhoto,
-                        BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes){
+                        BindingResult bindingResult, Model model, Authentication authentication,
+                         RedirectAttributes redirectAttributes){
         if(bindingResult.hasErrors()){
 
             List<Category> categoryList = categoryRepository.findByOrderByName();
@@ -78,7 +86,7 @@ public class PhotoController {
         }
         try{
             formPhoto.setCreatedAt(LocalDateTime.now());
-            Photo savedPhoto = photoService.createPhoto(formPhoto);
+            Photo savedPhoto = photoService.savedPhoto(formPhoto);
             return "redirect:/photos/show/" + savedPhoto.getId();
         }catch (PhotoTitleUniqueException e){
             bindingResult.addError(new FieldError("photo", "title", e.getMessage(),
@@ -91,16 +99,21 @@ public class PhotoController {
     }
 
     @GetMapping("/edit/{id}")
-    public String edit (@PathVariable Integer id, Model model) {
-        try{
-            model.addAttribute("photo", photoService.getPhotoById(id));
+    public String edit (@PathVariable Integer id, Model model, Authentication authentication) {
+        DatabaseUserDetails user = (DatabaseUserDetails) authentication.getPrincipal();
+        Integer photoId = photoService.getPhotoById(id).getUser().getId();
+        if (user.getId().equals(photoId)){
+            try{
+                model.addAttribute("photo", photoService.getPhotoById(id));
+                List<Category> categoryList = categoryRepository.findByOrderByName();
+                model.addAttribute("categoryList", categoryList);
 
-            List<Category> categoryList = categoryRepository.findByOrderByName();
-            model.addAttribute("categoryList", categoryList);
-
-            return "/photos/form";
-        }catch (PhotoNotFoundException e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "photo with id " + id + " not found");
+                return "/photos/form";
+            }catch (PhotoNotFoundException e){
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "photo with id " + id + " not found");
+            }
+        } else {
+            throw new UserIdNotValidException("Cannot edit other users photos");
         }
     }
 
@@ -122,18 +135,27 @@ public class PhotoController {
     }
 
     @PostMapping("delete/{id}")
-    public String delete(@PathVariable Integer id, RedirectAttributes redirectAttributes){
-        try{
-            Photo photoToDelete = photoService.getPhotoById(id);
-            photoService.deletePhoto(id);
-            redirectAttributes.addFlashAttribute(
-                    "message",
-                    photoToDelete.getTitle()
-                            + " deleted!"
-            );
-            return "redirect:/photos";
-        }catch (PhotoNotFoundException e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+    public String delete(@PathVariable Integer id, 
+                         RedirectAttributes redirectAttributes, 
+                         Authentication authentication){
+
+        DatabaseUserDetails user = (DatabaseUserDetails) authentication.getPrincipal();
+        Integer photoId = photoService.getPhotoById(id).getUser().getId();
+        if (user.getId().equals(photoId)){
+            try{
+                Photo photoToDelete = photoService.getPhotoById(id);
+                photoService.deletePhoto(id);
+                redirectAttributes.addFlashAttribute(
+                        "message",
+                        photoToDelete.getTitle()
+                                + " deleted!"
+                );
+                return "redirect:/photos";
+            }catch (PhotoNotFoundException e){
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            }
+        }else {
+            throw new UserIdNotValidException("Cannot edit other users photos");
         }
     }
 
