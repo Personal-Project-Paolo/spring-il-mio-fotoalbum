@@ -3,6 +3,7 @@ package org.learning.springilmiofotoalbum.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
@@ -37,6 +38,11 @@ public class Photo {
 
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Category> categories;
+
+
+    @NotNull
+    @ManyToOne
+    private User user;
 
     //Getter e Setter
     public Integer getId() {
@@ -93,5 +99,13 @@ public class Photo {
 
     public void setCategories(List<Category> categories) {
         this.categories = categories;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
