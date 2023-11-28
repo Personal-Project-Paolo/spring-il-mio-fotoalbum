@@ -66,4 +66,13 @@ public class DatabaseUserDetails implements UserDetails {
     public Integer getId() {
         return id;
     }
+
+    public boolean isSuperAdmin(){
+        for (GrantedAuthority a : authorities) {
+            if (a.getAuthority().equals("SUPERADMIN")){
+                return true;
+            }
+        }
+        return false;
+    }
 }
