@@ -2,8 +2,11 @@ package org.learning.springilmiofotoalbum.service;
 
 import org.learning.springilmiofotoalbum.exception.PhotoTitleUniqueException;
 import org.learning.springilmiofotoalbum.exception.PhotoNotFoundException;
+import org.learning.springilmiofotoalbum.exception.UserNotFoundException;
 import org.learning.springilmiofotoalbum.model.Photo;
+import org.learning.springilmiofotoalbum.model.User;
 import org.learning.springilmiofotoalbum.repository.PhotoRepository;
+import org.learning.springilmiofotoalbum.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +23,9 @@ public class PhotoService {
     @Autowired
     private PhotoRepository photoRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     //Index
     public List<Photo> getPhotoList(Optional<String> search){
       if(search.isPresent()){
@@ -30,6 +36,17 @@ public class PhotoService {
       }
     }
 
+    public  List<Photo> getPhotoListForAdmin(Optional <String> search, Integer userId){
+        if(search.isPresent()){
+            return photoRepository.findByUserIdAndTitleContainingIgnoreCase(userId, search.get());
+        }
+        else {
+            return photoRepository.findByUserId(userId);
+        }
+    }
+
+
+    //Frontend
     public List<Photo> getPhotoVisibility(Optional<String> search){
         if(search.isPresent()){
             return photoRepository.findByVisibleAndTitleContainingIgnoreCase(true, search.get());
@@ -38,8 +55,18 @@ public class PhotoService {
             return photoRepository.findByVisible(true);
         }
     }
+    public List<Photo> getPhotoForAdminVisibility(Optional<String> search, Integer userId){
+        if(search.isPresent()){
+            return photoRepository.findByUserIdAndVisibleAndTitleContainingIgnoreCase(
+                    userId, true, search.get()
+            );
+        }
+        else {
+            return photoRepository.findByUserIdAndVisible(userId, true);
+        }
+    }
 
-    public List<Photo> getPhotoList() {
+    public List<Photo> getPhotoListAll() {
         return photoRepository.findAll();
     }
 
@@ -54,13 +81,22 @@ public class PhotoService {
     }
 
     //Create
-    public Photo createPhoto(Photo photo) throws PhotoTitleUniqueException {
+    public Photo createPhoto(Integer userId) throws UserNotFoundException {
+        User user = userRepository.findById(userId).
+                orElseThrow(() -> new UserNotFoundException("User with id " + userId + " not found"));
+        Photo photo = new Photo();
+        photo.setUser(user);
+        return photo;
+    }
+
+    public Photo savedPhoto(Photo photo) throws PhotoTitleUniqueException{
         photo.setId(null);
         try{
             return photoRepository.save(photo);
-        } catch (RuntimeException e) {
-            throw new PhotoTitleUniqueException(photo.getTitle());
+        } catch(RuntimeException e){
+            throw new PhotoTitleUniqueException((photo.getTitle()));
         }
+
     }
 
     //Edit
