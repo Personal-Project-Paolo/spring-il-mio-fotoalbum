@@ -7,9 +7,12 @@ import org.learning.springilmiofotoalbum.exception.UserIdNotValidException;
 import org.learning.springilmiofotoalbum.exception.UserNotFoundException;
 import org.learning.springilmiofotoalbum.model.Category;
 import org.learning.springilmiofotoalbum.model.Photo;
+import org.learning.springilmiofotoalbum.model.User;
 import org.learning.springilmiofotoalbum.repository.CategoryRepository;
+import org.learning.springilmiofotoalbum.repository.UserRepository;
 import org.learning.springilmiofotoalbum.security.DatabaseUserDetails;
 import org.learning.springilmiofotoalbum.service.PhotoService;
+import org.learning.springilmiofotoalbum.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -35,12 +38,27 @@ public class PhotoController {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UsersService usersService;
+
     @GetMapping
     public String index (@RequestParam Optional<String> search, Model model, Authentication authentication){
 
         DatabaseUserDetails user = (DatabaseUserDetails) authentication.getPrincipal();
         /*System.out.println(user.getUsername());
         System.out.println(user.getAuthorities());*/
+
+        DatabaseUserDetails principal = (DatabaseUserDetails) authentication.getPrincipal();
+        User loggedUser = userRepository.findById(principal.getId()).orElse(null);
+
+        if (loggedUser != null) {
+            model.addAttribute("firstName", loggedUser.getFirstName());
+            model.addAttribute("lastName", loggedUser.getLastName());
+        }
+
         if (user.isSuperAdmin()){
             model.addAttribute("photoList", photoService.getPhotoList(search));
         }else{
@@ -50,13 +68,28 @@ public class PhotoController {
     }
 
     @GetMapping("/show/{id}")
-    public String show (@PathVariable Integer id, Model model){
-        try{
-            Photo photo = photoService.getPhotoById(id);
-            model.addAttribute("photo", photo);
-            return "photos/show";
-        }catch (PhotoNotFoundException e){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+    public String show (@PathVariable Integer id, Model model, Authentication authentication){
+        DatabaseUserDetails user = (DatabaseUserDetails) authentication.getPrincipal();
+        Integer photoId = photoService.getPhotoById(id).getUser().getId();
+        if (user.isSuperAdmin() || user.getId().equals(photoId)) {
+            try {
+                Photo photo = photoService.getPhotoById(id);
+                model.addAttribute("photo", photo);
+
+                DatabaseUserDetails principal = (DatabaseUserDetails) authentication.getPrincipal();
+                User loggedUser = userRepository.findById(principal.getId()).orElse(null);
+
+                if (loggedUser != null) {
+                    model.addAttribute("firstName", loggedUser.getFirstName());
+                    model.addAttribute("lastName", loggedUser.getLastName());
+                }
+
+                return "photos/show";
+            } catch (PhotoNotFoundException e) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage());
+            }
+        }else{
+            throw new UserIdNotValidException("Cannot show other users photos");
         }
     }
 
@@ -75,8 +108,7 @@ public class PhotoController {
 
     @PostMapping("/create")
     public String store (@Valid @ModelAttribute("photo") Photo formPhoto,
-                        BindingResult bindingResult, Model model, Authentication authentication,
-                         RedirectAttributes redirectAttributes){
+                        BindingResult bindingResult, Model model){
         if(bindingResult.hasErrors()){
 
             List<Category> categoryList = categoryRepository.findByOrderByName();
@@ -90,7 +122,7 @@ public class PhotoController {
             return "redirect:/photos/show/" + savedPhoto.getId();
         }catch (PhotoTitleUniqueException e){
             bindingResult.addError(new FieldError("photo", "title", e.getMessage(),
-                    false, null, null, "This Photo already exist" ));
+                    false, null, null, "This Photo already exist"));
 
             List<Category> categoryList = categoryRepository.findByOrderByName();
             model.addAttribute("categoryList", categoryList);
@@ -102,7 +134,7 @@ public class PhotoController {
     public String edit (@PathVariable Integer id, Model model, Authentication authentication) {
         DatabaseUserDetails user = (DatabaseUserDetails) authentication.getPrincipal();
         Integer photoId = photoService.getPhotoById(id).getUser().getId();
-        if (user.getId().equals(photoId)){
+        if (user.isSuperAdmin() || user.getId().equals(photoId)){
             try{
                 model.addAttribute("photo", photoService.getPhotoById(id));
                 List<Category> categoryList = categoryRepository.findByOrderByName();
@@ -121,6 +153,7 @@ public class PhotoController {
     public String update (@PathVariable Integer id,
                           @Valid @ModelAttribute("photo") Photo formPhoto,
                           BindingResult bindingResult, Model model) {
+
         if(bindingResult.hasErrors()){
             List<Category> categoryList = categoryRepository.findByOrderByName();
             model.addAttribute("categoryList", categoryList);
@@ -141,7 +174,7 @@ public class PhotoController {
 
         DatabaseUserDetails user = (DatabaseUserDetails) authentication.getPrincipal();
         Integer photoId = photoService.getPhotoById(id).getUser().getId();
-        if (user.getId().equals(photoId)){
+        if (user.isSuperAdmin() || user.getId().equals(photoId)){
             try{
                 Photo photoToDelete = photoService.getPhotoById(id);
                 photoService.deletePhoto(id);

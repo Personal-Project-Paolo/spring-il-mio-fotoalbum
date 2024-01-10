@@ -41,16 +41,6 @@ public class PhotoRestController {
         }
     }
 
-    //http://localhost:8080/api/v1/photos
-    @PostMapping
-    public Photo create(@Valid @RequestBody Photo photo) {
-        try {
-            return photoService.createPhoto(photo);
-        } catch (PhotoTitleUniqueException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
-        }
-    }
-
     //http://localhost:8080/api/v1/photos/id
     @PutMapping("/{id}")
     public Photo update(@PathVariable Integer id, @Valid @RequestBody Photo photo) {

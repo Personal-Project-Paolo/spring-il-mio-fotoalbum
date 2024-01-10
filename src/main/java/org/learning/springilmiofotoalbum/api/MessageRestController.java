@@ -18,12 +18,6 @@ public class MessageRestController {
     @Autowired
     MessageService messageService;
 
-    //http://localhost:8080/api/v1/messages
-    @GetMapping
-    public List<Message> index (){
-        return messageService.getMessageList();
-    }
-
     @PostMapping
     public Message create(@Valid @RequestBody Message message){
         return messageService.createMessage(message);

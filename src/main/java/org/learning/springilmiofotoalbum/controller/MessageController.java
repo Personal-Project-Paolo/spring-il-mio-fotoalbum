@@ -2,7 +2,11 @@ package org.learning.springilmiofotoalbum.controller;
 
 import org.learning.springilmiofotoalbum.exception.MessageNotFoundException;
 import org.learning.springilmiofotoalbum.model.Message;
+import org.learning.springilmiofotoalbum.model.User;
+import org.learning.springilmiofotoalbum.repository.UserRepository;
+import org.learning.springilmiofotoalbum.security.DatabaseUserDetails;
 import org.learning.springilmiofotoalbum.service.MessageService;
+import org.learning.springilmiofotoalbum.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -22,9 +26,24 @@ public class MessageController {
     @Autowired
     private MessageService messageService;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UsersService usersService;
+
     @GetMapping
     public String index (Authentication authentication, Model model){
-        model.addAttribute("messageList", messageService.getMessageList());
+        DatabaseUserDetails principal = (DatabaseUserDetails) authentication.getPrincipal();
+        DatabaseUserDetails user = (DatabaseUserDetails) authentication.getPrincipal();
+        User loggedUser = userRepository.findById(principal.getId()).orElse(null);
+
+        if (loggedUser != null) {
+            model.addAttribute("firstName", loggedUser.getFirstName());
+            model.addAttribute("lastName", loggedUser.getLastName());
+        }
+
+        model.addAttribute("messageList", messageService.geMessageListByAdmin(user.getId()));
         return "/messages/list";
     }
 

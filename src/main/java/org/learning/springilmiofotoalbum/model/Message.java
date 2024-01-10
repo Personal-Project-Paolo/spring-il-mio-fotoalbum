@@ -17,7 +17,6 @@ public class Message {
     private Integer id;
 
     @NotBlank
-    @Email
     private String email;
 
     @NotBlank(message = "Message must not be blank")
@@ -27,10 +26,8 @@ public class Message {
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    //Togliere la virgola
-   /* @NotNull
     @ManyToOne
-    private User, user;*/
+    private User user;
 
 
     public Integer getId() {
@@ -66,11 +63,11 @@ public class Message {
     }
 
     //Get/Set --- Relazione
-   /* public User getUser() {
+    public User getUser() {
         return user;
     }
 
     public void setUser(User user) {
         this.user = user;
-    }*/
+    }
 }

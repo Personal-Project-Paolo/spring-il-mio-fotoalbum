@@ -4,9 +4,14 @@ import jakarta.validation.Valid;
 import org.learning.springilmiofotoalbum.exception.CategoryNameUniqueException;
 import org.learning.springilmiofotoalbum.exception.CategoryNotFoundException;
 import org.learning.springilmiofotoalbum.model.Category;
+import org.learning.springilmiofotoalbum.model.User;
+import org.learning.springilmiofotoalbum.repository.UserRepository;
+import org.learning.springilmiofotoalbum.security.DatabaseUserDetails;
 import org.learning.springilmiofotoalbum.service.CategoryService;
+import org.learning.springilmiofotoalbum.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -23,10 +28,25 @@ public class CategoryController {
     @Autowired
     CategoryService categoryService;
 
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private UsersService usersService;
+
     @GetMapping
-    public String index (@RequestParam Optional<String> search,  Model model) {
+    public String index (@RequestParam Optional<String> search,  Model model, Authentication authentication) {
         model.addAttribute("categoryList", categoryService.getCategoryList(search));
         model.addAttribute("categoryObj", new Category());
+
+        DatabaseUserDetails principal = (DatabaseUserDetails) authentication.getPrincipal();
+        User loggedUser = userRepository.findById(principal.getId()).orElse(null);
+
+        if (loggedUser != null) {
+            model.addAttribute("firstName", loggedUser.getFirstName());
+            model.addAttribute("lastName", loggedUser.getLastName());
+        }
+
         return "categories/list";
     }
 

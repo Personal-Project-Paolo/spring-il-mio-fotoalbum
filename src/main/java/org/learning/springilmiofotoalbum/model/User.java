@@ -32,9 +32,9 @@ public class User {
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
 
-   /* @OneToMany(mappedBy = "user", orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnore
-    private List<Message> messages = new ArrayList<>();*/
+    private List<Message> messages = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnore
@@ -104,11 +104,11 @@ public class User {
         this.photos = photos;
     }
 
-    /*public List<Message> getMessages() {
+    public List<Message> getMessages() {
         return messages;
     }
 
     public void setMessages(List<Message> messages) {
         this.messages = messages;
-    }*/
+    }
 }

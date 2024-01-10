@@ -39,7 +39,6 @@ public class Photo {
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Category> categories;
 
-
     @NotNull
     @ManyToOne
     private User user;

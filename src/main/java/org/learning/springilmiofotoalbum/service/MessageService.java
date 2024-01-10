@@ -24,6 +24,10 @@ public class MessageService {
         return messageRepository.findAll();
     }
 
+    public List<Message> geMessageListByAdmin(Integer userId){
+        return messageRepository.findByUserId(userId);
+    }
+
     //Show
     public Message getMessageById(Integer id) throws MessageNotFoundException {
         Optional<Message> result = messageRepository.findById(id);
